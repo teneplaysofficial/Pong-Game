@@ -2,6 +2,19 @@
 const canvas = document.getElementById('pongCanvas');
 const ctx = canvas.getContext('2d');
 
+// Responsive canvas sizing
+function resizeCanvas() {
+    const container = canvas.parentElement;
+    const maxWidth = Math.min(800, window.innerWidth - 40);
+    const aspectRatio = 400 / 800;
+    
+    canvas.width = maxWidth;
+    canvas.height = maxWidth * aspectRatio;
+}
+
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
 // Game objects
 const paddleWidth = 10;
 const paddleHeight = 80;
@@ -48,6 +61,49 @@ window.addEventListener('keyup', (e) => {
     keys[e.key] = false;
 });
 
+// Mobile button controls
+const upBtn = document.getElementById('upBtn');
+const downBtn = document.getElementById('downBtn');
+
+let upPressed = false;
+let downPressed = false;
+
+upBtn.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    upPressed = true;
+});
+
+upBtn.addEventListener('touchend', (e) => {
+    e.preventDefault();
+    upPressed = false;
+});
+
+upBtn.addEventListener('mousedown', () => {
+    upPressed = true;
+});
+
+upBtn.addEventListener('mouseup', () => {
+    upPressed = false;
+});
+
+downBtn.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    downPressed = true;
+});
+
+downBtn.addEventListener('touchend', (e) => {
+    e.preventDefault();
+    downPressed = false;
+});
+
+downBtn.addEventListener('mousedown', () => {
+    downPressed = true;
+});
+
+downBtn.addEventListener('mouseup', () => {
+    downPressed = false;
+});
+
 // Mouse movement
 canvas.addEventListener('mousemove', (e) => {
     const rect = canvas.getBoundingClientRect();
@@ -63,11 +119,33 @@ canvas.addEventListener('mousemove', (e) => {
     }
 });
 
+// Touch control for direct canvas touch
+canvas.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    const rect = canvas.getBoundingClientRect();
+    const touch = e.touches[0];
+    const touchY = touch.clientY - rect.top;
+    
+    // Smooth touch control
+    if (touchY - paddleHeight / 2 < player.y) {
+        player.dy = -player.speed;
+    } else if (touchY - paddleHeight / 2 > player.y) {
+        player.dy = player.speed;
+    } else {
+        player.dy = 0;
+    }
+});
+
+canvas.addEventListener('touchend', (e) => {
+    e.preventDefault();
+    player.dy = 0;
+});
+
 // Arrow key control
 function handleArrowKeys() {
-    if (keys['ArrowUp']) {
+    if (keys['ArrowUp'] || upPressed) {
         player.dy = -player.speed;
-    } else if (keys['ArrowDown']) {
+    } else if (keys['ArrowDown'] || downPressed) {
         player.dy = player.speed;
     } else {
         player.dy = 0;
