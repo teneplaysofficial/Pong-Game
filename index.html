@@ -24,8 +24,15 @@
         <div class="game-board" id="gameBoard">
             <canvas id="pongCanvas" width="800" height="400"></canvas>
             <div class="controls">
-                <p>Use <strong>Mouse</strong> or <strong>Arrow Keys (Up/Down)</strong> to move left paddle</p>
+                <p class="desktop-controls">Use <strong>Mouse</strong> or <strong>Arrow Keys (Up/Down)</strong> to move left paddle</p>
+                <p class="mobile-controls">Tap and drag or use buttons to move paddle</p>
             </div>
+        </div>
+
+        <!-- Mobile touch controls -->
+        <div class="mobile-buttons">
+            <button class="mobile-btn" id="upBtn">▲</button>
+            <button class="mobile-btn" id="downBtn">▼</button>
         </div>
         
         <button class="reset-btn" id="resetBtn">Reset Game</button>
